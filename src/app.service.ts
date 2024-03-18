@@ -1,22 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+// import { ConfigService } from '@nestjs/config';
+import { UsersService } from './users/users.service';
 
 // 요청, 응답에 대해서는 모름. 순수하게 해야 하는 일 만 하고 컨트롤러로 돌려주기
 @Injectable()
 export class AppService {
-  constructor(private configService: ConfigService) {}
-
-  getUser(): string {
-    return 'Hello World!';
+  constructor(private usersService: UsersService) {}
+  async getHello() {
+    this.usersService.getUsers();
+    this.getWow();
+    return process.env.SC
   }
 
-  postUser(): string {
-    return 'post succeeded'
-  }
+  async getWow() {
 
-  gethello(): string {
-    return this.configService.get('SC')
-    // process.env.SC
   }
 }
 
