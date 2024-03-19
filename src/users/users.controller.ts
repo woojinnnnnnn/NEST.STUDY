@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Post, Req, Res, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards, UseInterceptors } from '@nestjs/common';
 import { JoinRequestsDto } from './dto/join.requests.dto'; // 따로 만들어서 가져와야 함.
 import { UsersService } from './users.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDto } from './common/dto/user.dto';
 import { User } from './common/decorator/user.decorator';
 import { UndefinedToNullInterceptor } from './common/interceptor/undefinedToNull.interceptor';
+import { LocalAuthGuard } from 'src/auth/local-auth.guard';
 
 // @UseInterceptors(UndefinedToNullInterceptor)
 @ApiTags('USER')
@@ -25,8 +26,9 @@ export class UsersController {
     @ApiOperation({ summary: '회원가입' })
     // 회원 가입
     @Post()
-    postUsers(@Body() data: JoinRequestsDto) {
-        this.usersService.postUsers(data.email, data.nickname, data.password);
+    async join(@Body() body: JoinRequestsDto) {
+        await this.usersService.join(body.email, body.nickname, body.password);
+        
     }
 
     @ApiResponse( {
@@ -35,6 +37,7 @@ export class UsersController {
         type: UserDto
     })
     @ApiOperation({ summary: "로그인" })
+    @UseGuards(LocalAuthGuard)
     @Post('login')
     logIn(@User() user) {
         return user;

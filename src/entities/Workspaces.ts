@@ -23,6 +23,7 @@ import { Users } from './Users';
 @Entity({ schema: 'sleact', name: 'workspaces' }) // Entity 에서 Workspaces 가 테이블 명.
 // DB 명은 sleact
 export class Workspaces {
+      // 이렇게 각 컬럼들 지정.
     @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
 
@@ -44,6 +45,10 @@ export class Workspaces {
     @Column('int', { name: 'OwnerId', nullable: true })
     OwnerId: number | null;
 
+    // 이 부분 부터는 각 테이블 간 관계 설정 부분.
+
+    // 워크 스페이스 기준으로 채널과의 일 대 다 관계 지정.
+    // 주의 할 부분으로 여기서 설정 했다면 채널 부분에서도 설정을 해주어야 함.
     @OneToMany(() => Channels, (channels) => channels.Workspace)
     Channels: Channels[];
 
